@@ -6,6 +6,7 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <string.h>
+# include <stdlib.h>
 
 void Rock_Paper_Scissors();
 void Hangman();

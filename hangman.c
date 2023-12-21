@@ -121,48 +121,97 @@ void Print_hangman(int lifes){
 
 }
 
-int Check_letter(char *random_word, char guessed_letter){
-	int how_many = 0;
-	int complete;
+int Check_letter(char *random_word, char entered_letter, int lifes){
+	int loop_index;
 
-	for(int i = 0; i < 5; i++){
-		if(guessed_letter == random_word[i]){
-			printf("yes ");
-			how_many++;
+	static int num_correct = 1;
+	static int old_correct = 0;
+	int complete;
+	static int guessed_letter_ar[5] = { 0,0,0,0,0 };
+
+	int is_guessed;
+
+
+	old_correct = num_correct;
+
+
+	Print_hangman(lifes);
+
+	printf("\n");
+
+	for(loop_index = 0; loop_index < 5; loop_index++){
+		if(guessed_letter_ar[loop_index] == 1){
+			continue;
 		}
-		else
-			printf("no ");
+
+		if(entered_letter == random_word[loop_index]){
+
+			guessed_letter_ar[loop_index] = 1;
+			num_correct++;
+		}
 	}
 	printf("\n");
-	return how_many;
+
+	printf("Hangman word:  ");
+
+	for(loop_index = 0; loop_index < 5; loop_index++){
+		if(guessed_letter_ar[loop_index] == 1){
+			printf("%c ", random_word[loop_index]);
+		}
+		else{
+			printf("- ");
+		}
+	}
+	printf("\n");
+	if(old_correct == num_correct){
+		is_guessed = 0;
+		printf("Wrong letter\n");
+	}
+	else
+		is_guessed = 1;
+	printf("num_correct so far: %i\n", num_correct);
+
+	if(num_correct == 5){
+		printf("Congratulations, you guessed the word: %s\nBye bye\n", random_word);
+		exit(0);
+	}
+
+
+
+	return is_guessed;
 
 }
 
 
 
 char Input_letter(){
-	static char guessed_letter[20];
+	static char entered_letter[20];
 
-	scanf("%s", guessed_letter);
-	if(strlen(guessed_letter) > 1){
+	printf("Input a letter please: ");
+	scanf("%s", entered_letter);
+
+	if(strncmp(entered_letter, "quit", 4) == 0){
+		exit(0);
+	}
+	if(strlen(entered_letter) > 1){
 		printf("Even if more than one letter is entered, only the first one will count. Dumbass.\n");
 	}
-	if(guessed_letter[0] >= 'A' && guessed_letter[0] <= 'Z')
-		guessed_letter[0] += 32;
-	else if(!( guessed_letter[0] >= 'a' && guessed_letter[0] <= 'z')){
+	if(entered_letter[0] >= 'A' && entered_letter[0] <= 'Z')
+		entered_letter[0] += 32;
+	else if(!( entered_letter[0] >= 'a' && entered_letter[0] <= 'z')){
 		printf("Because you didn't enter a letter, I will choose a random letter:\n");
-		guessed_letter[0] = (Random_number() % 26) + 97;
+		entered_letter[0] = (Random_number() % 26) + 97;
 	}
 
-	printf("guessed letter: %s\n", guessed_letter);
-	return guessed_letter[0];
+	printf("guessed letter: %s\n", entered_letter);
+	return entered_letter[0];
 }
 
 // how many lives i have
-int Life_management(int how_many){
-	int lifes = 7;
+int Life_management(int num_correct){
+	static int lifes = 7;
 
-	if(how_many == 0){
+	if(num_correct == 0){
 		lifes--;
 	}
 
@@ -170,18 +219,24 @@ int Life_management(int how_many){
 }
 
 
-
 void	Hangman(){
 	char *randomize_word = Randomize_word();
-	char input_letter = Input_letter();
+	char input_letter;
 	int is_complete;
-	int lifes = Life_management(Check_letter(randomize_word, input_letter));
+	int lifes = 7;
+		lifes = Life_management(Check_letter(randomize_word, input_letter, lifes));
+		Print_hangman(lifes);
 
-	while(lifes == 0 || is_complete == 1){
-
+	while(lifes != 0 || is_complete == 1){
+		input_letter = Input_letter();
+		lifes = Life_management(Check_letter(randomize_word, input_letter, lifes));
+//		Print_hangman(lifes);
+		if(lifes == 0){
+			printf("Sorry, you lose, the word was: %s\n", randomize_word);
+			exit(0);
+		}
 	}
 
-	Print_hangman(lifes);
 
 
 //	QUEDA PENDIENTE HACER SI LA PALABRA ESTA COMPLETADA O NO
