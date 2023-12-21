@@ -65,7 +65,7 @@ char	*Randomize_word(){
 	random_index = Random_number() % 79;
 	random_word = five_letter[random_index];
 
-	printf("random word: %5s\n", random_word);
+//	printf("random word: %5s\n", random_word);
 
 
 	return (random_word);
@@ -117,14 +117,14 @@ void Print_hangman(int lifes){
 	printf("	%c%c%c%c%c%c%c%c\n",	186,	32,		32,		32,		32,		Print_management(lifes, 5),	32,		32);
 	printf("	%c%c%c%c%c%c%c%c\n",	186,	32,		32,		32,		Print_management(lifes, 6),		32,		Print_management(lifes, 7),		32);
 	printf("	%c%c%c%c%c%c%c%c\n",	186,	32,		32,		32,		32,		32,		32,		32);
-	printf("	%c%c%c%c%c%c%c%c\n",	202,	205,	176,	176,	176,	176,	176,	176);
+	printf("	%c%c%c%c%c%c%c%c%c%c\n",	202,	205,	176,	176,	176,	176,	176,	176, 176, 176);
 
 }
 
 int Check_letter(char *random_word, char entered_letter, int lifes){
 	int loop_index;
 
-	static int num_correct = 1;
+	static int num_correct = 0;
 	static int old_correct = 0;
 	int complete;
 	static int guessed_letter_ar[5] = { 0,0,0,0,0 };
@@ -135,8 +135,8 @@ int Check_letter(char *random_word, char entered_letter, int lifes){
 	old_correct = num_correct;
 
 
-	Print_hangman(lifes);
-
+//	Print_hangman(lifes);
+	usleep(500000);
 	printf("\n");
 
 	for(loop_index = 0; loop_index < 5; loop_index++){
@@ -150,7 +150,7 @@ int Check_letter(char *random_word, char entered_letter, int lifes){
 			num_correct++;
 		}
 	}
-	printf("\n");
+//	printf("\n");
 
 	printf("Hangman word:  ");
 
@@ -165,14 +165,17 @@ int Check_letter(char *random_word, char entered_letter, int lifes){
 	printf("\n");
 	if(old_correct == num_correct){
 		is_guessed = 0;
-		printf("Wrong letter\n");
+		printf("The letter you entered isn't in the word\n");
 	}
-	else
+	else{
+		printf("YEii\nThe letter you entered it's in the word!!\n");
 		is_guessed = 1;
-	printf("num_correct so far: %i\n", num_correct);
+
+	}
+//	printf("num_correct so far: %i\n", num_correct);
 
 	if(num_correct == 5){
-		printf("Congratulations, you guessed the word: %s\nBye bye\n", random_word);
+		printf("CONGRATULATIONSSSSSS, you guessed the word: %s\nBye bye\n", random_word);
 		exit(0);
 	}
 
@@ -203,7 +206,7 @@ char Input_letter(){
 		entered_letter[0] = (Random_number() % 26) + 97;
 	}
 
-	printf("guessed letter: %s\n", entered_letter);
+//	printf("guessed letter: %s\n", entered_letter);
 	return entered_letter[0];
 }
 
@@ -215,6 +218,7 @@ int Life_management(int num_correct){
 		lifes--;
 	}
 
+	printf("YOU HAVE %i LIFES\n", lifes);
 	return lifes;
 }
 
@@ -224,13 +228,13 @@ void	Hangman(){
 	char input_letter;
 	int is_complete;
 	int lifes = 7;
-		lifes = Life_management(Check_letter(randomize_word, input_letter, lifes));
+//		lifes = Life_management(Check_letter(randomize_word, input_letter, lifes));
 		Print_hangman(lifes);
 
 	while(lifes != 0 || is_complete == 1){
 		input_letter = Input_letter();
 		lifes = Life_management(Check_letter(randomize_word, input_letter, lifes));
-//		Print_hangman(lifes);
+		Print_hangman(lifes);
 		if(lifes == 0){
 			printf("Sorry, you lose, the word was: %s\n", randomize_word);
 			exit(0);
