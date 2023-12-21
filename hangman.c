@@ -176,6 +176,7 @@ int Check_letter(char *random_word, char entered_letter, int lifes){
 
 	if(num_correct == 5){
 		printf("CONGRATULATIONSSSSSS, you guessed the word: %s\nBye bye\n", random_word);
+		usleep(5000000);
 		exit(0);
 	}
 
@@ -237,6 +238,7 @@ void	Hangman(){
 		Print_hangman(lifes);
 		if(lifes == 0){
 			printf("Sorry, you lose, the word was: %s\n", randomize_word);
+			usleep(5000000);
 			exit(0);
 		}
 	}
