@@ -1,5 +1,6 @@
 #include "c_projects.h"
 
+//THIS IS HOW I GET A RANDOM NUMBER BASED ON WHAT MILLISECONDS I HAVE
 long long Random_number(){
 	struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -62,20 +63,15 @@ char	*Randomize_word(){
 			"young", "youth"
 	};
 
+//	THIS IS HOW I GET A RANDOM WORD BASED ON A RANDOMIZER
 	random_index = Random_number() % 79;
 	random_word = five_letter[random_index];
-
-//	printf("random word: %5s\n", random_word);
-
 
 	return (random_word);
 }
 
-//int Lives_manager()
-
-
 int Print_management(int lifes, int position){
-
+//DEPENDING ON WHAT POSITION, RETURN THE ASCII NUMBER
 //	positions:
 
 //	head -> pos 1, num 2
@@ -102,14 +98,11 @@ int Print_management(int lifes, int position){
 //	all -> pos 0, num 32
 	else
 		return 32;
-
 }
 
 void Print_hangman(int lifes){
 
-//	for(int i = 0; i <= 256; i++){
-//		printf("ASCII: %c  Number: %i\n", i, i);
-//	}
+//	PRINT IN ASCII NUMBERS THE HANGMAN
 	printf("	%c%c%c%c%c%c%c%c\n",	201,	205,	205,	205,	205,	205,	205,	32);
 	printf("	%c%c%c%c%c%c%c%c\n",	186,	32,		32,		32,		32,		179,	32,		32);
 	printf("	%c%c%c%c%c%c%c%c\n",	186,	32,		32,		32,		32,		Print_management(lifes, 1),		32,		32);
@@ -121,12 +114,11 @@ void Print_hangman(int lifes){
 
 }
 
-int Check_letter(char *random_word, char entered_letter, int lifes){
+int Check_letter(char *random_word, char entered_letter){
 	int loop_index;
 
 	static int num_correct = 0;
 	static int old_correct = 0;
-	int complete;
 	static int guessed_letter_ar[5] = { 0,0,0,0,0 };
 
 	int is_guessed;
@@ -165,14 +157,13 @@ int Check_letter(char *random_word, char entered_letter, int lifes){
 	printf("\n");
 	if(old_correct == num_correct){
 		is_guessed = 0;
-		printf("The letter you entered isn't in the word\n");
+		printf("The letter \"%c\" isn't in the word\n", entered_letter);
 	}
 	else{
-		printf("YEii\nThe letter you entered it's in the word!!\n");
+		printf("YEii\nThe letter \"%c\" it's in the word!!\n", entered_letter);
 		is_guessed = 1;
 
 	}
-//	printf("num_correct so far: %i\n", num_correct);
 
 	if(num_correct == 5){
 		printf("CONGRATULATIONSSSSSS, you guessed the word: %s\nBye bye\n", random_word);
@@ -194,24 +185,26 @@ char Input_letter(){
 	printf("Input a letter please: ");
 	scanf("%s", entered_letter);
 
+//	IF THE USER ENTERS QUIT, EXIT THE PROGRAM
 	if(strncmp(entered_letter, "quit", 4) == 0){
 		exit(0);
 	}
+//	IF THE USER ENTERS MORE THAN ONE LETTER
 	if(strlen(entered_letter) > 1){
 		printf("Even if more than one letter is entered, only the first one will count. Dumbass.\n");
 	}
+//	IF THE USER ENTERS A UPPERCASE LETTER
 	if(entered_letter[0] >= 'A' && entered_letter[0] <= 'Z')
 		entered_letter[0] += 32;
+//	IF THE USER DOES NOT ENTER A LETTER (I.E. A NUMBER)
 	else if(!( entered_letter[0] >= 'a' && entered_letter[0] <= 'z')){
 		printf("Because you didn't enter a letter, I will choose a random letter:\n");
 		entered_letter[0] = (Random_number() % 26) + 97;
 	}
 
-//	printf("guessed letter: %s\n", entered_letter);
 	return entered_letter[0];
 }
 
-// how many lives i have
 int Life_management(int num_correct){
 	static int lifes = 7;
 
@@ -227,14 +220,12 @@ int Life_management(int num_correct){
 void	Hangman(){
 	char *randomize_word = Randomize_word();
 	char input_letter;
-	int is_complete;
 	int lifes = 7;
-//		lifes = Life_management(Check_letter(randomize_word, input_letter, lifes));
-		Print_hangman(lifes);
+	Print_hangman(lifes);
 
-	while(lifes != 0 || is_complete == 1){
+	while(lifes != 0){
 		input_letter = Input_letter();
-		lifes = Life_management(Check_letter(randomize_word, input_letter, lifes));
+		lifes = Life_management(Check_letter(randomize_word, input_letter));
 		Print_hangman(lifes);
 		if(lifes == 0){
 			printf("Sorry, you lose, the word was: %s\n", randomize_word);
@@ -243,35 +234,4 @@ void	Hangman(){
 		}
 	}
 
-
-
-//	QUEDA PENDIENTE HACER SI LA PALABRA ESTA COMPLETADA O NO
-
-
-//	printf("%i", Check_letter(randomize_word, input_letter));
-
-
-//	char hola[10];
-//	char adios[10] = "adios";
-//
-//	scanf("%s", hola);
-//
-//	printf("hola: %s\nadios: %s\n", hola, adios);
-//
-//	scanf("%s", hola);
-//
-//	printf("nuevo hola: %s\n", hola);
-
 }
-
-
-
-//yes dictionary
-
-//yes Select a random word
-
-//no output print lives
-
-//no manage input
-
-//no compare input x word
