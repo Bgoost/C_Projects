@@ -34,8 +34,8 @@
 //
 # define NX			50
 # define NY			50
-# define XBOUND		5
-# define YBOUND		5
+# define XBOUND		10
+# define YBOUND		10
 //
 //// CHAR ASCII SNAKE BODY
 # define TONGUE_UP		118
@@ -44,7 +44,10 @@
 # define TONGUE_RIGHT	60
 # define BODY			219
 //
-//
+// APPLE POINTS
+# define GOLD_APPLE		5
+# define DEF_APPLE		1
+# define PROB_GOLD		25
 //
 /////// END MACROS
 /////// STRUCT
@@ -56,10 +59,19 @@ struct snake {
 	struct snake *next;
 };
 
+struct apple {
+	int X;
+	int Y;
+	int AP;
+	int COLOR;
+	int POINTS;
+};
 
 
+long long Random_number();
 // PRINT FUNCTIONS
 void Gotoxy(int x, int y);
+void Print_apple();
 void Print_scene();
 void Print_snake(struct snake *body);
 void imprimir_Serpiente2(struct snake *body);
@@ -77,6 +89,11 @@ int collision_Self();
 
 // Fucking snake
 void Serpiente();
+
+// Fucking apple
+int Collision_apple(struct snake *body);
+void Reset_apple();
+void Create_apple();
 
 // OTHER
 void Rock_Paper_Scissors();

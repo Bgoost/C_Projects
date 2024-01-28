@@ -66,6 +66,14 @@ void Print_snake(struct snake *body){
 	}
 }
 
+void Print_apple(){
+	printf("%c[1;%dm", ESC, Apple -> COLOR);
+		Gotoxy(Apple -> X, Apple -> Y);
+		printf("%c", Apple -> AP);
+		printf("%c[0m", ESC);
+}
+
+
 //void imprimir_Serpiente2(struct snake *body){
 //	if(body -> next != NULL){
 //		if(body == Snake || body == Snake -> next){
@@ -148,7 +156,40 @@ void Move_snake(int x, int y, struct snake *body){
 
 
 
+int Collision_apple(struct snake *body){
+	static int collision;
+	if(body == Snake){
+		collision = 0;
+	}
+	collision += (body -> X == Apple -> X)&&(body -> Y == Apple -> Y);
+	if(!collision){
+		if(body -> next != NULL){
+			Collision_apple(body -> next);
+		}
+	}
+	return collision;
+}
 
+
+void Reset_apple(){
+	srand(time(NULL));
+	Apple -> X = XBOUND + rand() % NX + 2;
+	Apple -> Y = YBOUND + rand() % NY + 2;
+	if(Collision_apple(Snake)){
+		Reset_apple();
+	}
+	Apple -> POINTS = DEF_APPLE + (GOLD_APPLE - DEF_APPLE) * (PROB_GOLD >= Random_number() % 101);
+	Apple -> COLOR = 31 * (Apple -> POINTS == DEF_APPLE) + 33 * (Apple -> POINTS == GOLD_APPLE);
+}
+
+
+void Create_apple(){
+	Apple = (struct apple*)malloc(sizeof(struct apple));
+	Apple -> AP = BODY;
+
+	Reset_apple();
+
+}
 
 
 
